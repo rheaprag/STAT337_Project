@@ -22,3 +22,7 @@ covid_vaccines <- read.csv('COVID-19_Vaccinations_in_the_United_States_Jurisdict
 nyt_covid <- read.csv("https://github.com/nytimes/covid-19-data/raw/master/us-states.csv")
 #Covid cases and deaths listed by state
   
+#Because the nyt_covid file lists states in its full name vs abbreviation like the covid_vaccines file...
+nyt_covid$state <- state.abb[match(nyt_covid$state, state.name)]
+  #What do do about NAs? I think manually adding them would work bc I think there are abbreviations in the covid_vaccines file for them?
+    #or we could just remove them? but there are 4026 of them
