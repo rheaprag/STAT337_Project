@@ -1,10 +1,15 @@
 # STAT337_Project
 
-Analysis for STAT 337 Class Project
+This documentation details the analysis of SARS-Cov-2, also known as COVID-19. 
 
+The data used will be official CDC Vaccination Data which will include state, doses administered by vaccine brand, doses administered by age, and if a full series was delievered. The New York Times official database is regulary updated with information of the number of cases and the number of deaths per state. 
 
-Variables of interest: Location, vaccine brand, 65+ doses, full series/ first dose
+Our analysis will include comparing the number of vaccine doses to the number of cases/deaths per state. 
+
+## The official data can be found here:
 CDC Vaccination Data: https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-Jurisdi/unsk-b7fc/data
 
-
 NYT Database: https://github.com/nytimes/covid-19-data
+
+## Packages Used:
+This code was done using R programming language. The necessary libraries and installation instructions will be found in the project files. 
