@@ -19,6 +19,7 @@ covid_vac = pd.read_csv('COVID-19_Vaccinations_in_the_United_States_Jurisdiction
 for idx,column in enumerate(covid_vac.columns):
   print(idx,column)
 #important columns
+  #[0] - Date
   #[2] - Location: gives state
   #Vaccine Distributions
     #[3] - General
@@ -37,5 +38,5 @@ for idx,column in enumerate(covid_vac.columns):
     #[68] - Pfizer
   #Do we want to look by age?
 
-data = covid_vac.iloc[:,[3, 4, 5, 6, 33, 41, 42, 43, 57, 67, 68, 69]]
+data = covid_vac.iloc[:,[0, 2, 3, 4, 5, 6, 33, 41, 42, 43, 57, 67, 68, 69]]
 csv_data = data.to_csv("/Users/rhea/Desktop/STAT_Project/STAT_Project/covid_vac.csv", index = False)
