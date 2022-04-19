@@ -11,3 +11,17 @@ nyt_covid <- read.csv("https://github.com/nytimes/covid-19-data/raw/master/us-st
 nyt_covid$state <- state.abb[match(nyt_covid$state, state.name)]
   #What do do about NAs? I think manually adding them would work bc I think there are abbreviations in the covid_vaccines file for them?
     #or we could just remove them? but there are 4026 of them
+
+# The nyt_covid file also has a different date format than the covid_vaccines file (not sure if we want to use date)
+nyt_covid$newdate <- strptime(as.character(nyt_covid$date), "%Y-%m-%d")
+nyt_covid$newdate <- format(nyt_covid$newdate, "%m/%d/%Y")
+
+#Merge datasets individually by state
+cov_vac <- aggregate(x = covid_vaccines, by = list(covid_vaccines$Location), FUN = function(x) na.omit(x)[1])[,-1]
+nyt_cov <- aggregate(x = nyt_covid, by = list(nyt_covid$state), FUN = function(x) na.omit(x)[1])[,-1]
+
+# Pulls most recent covid rates (4/17/22)
+nyt_cov <- nyt_covid[ c(42847:42902), ]
+
+# Merge the datasets
+data <- merge(nyt_cov, cov_vac, by.x="state", by.y="Location")
