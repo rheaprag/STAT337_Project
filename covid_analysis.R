@@ -38,15 +38,46 @@ all_pred_lin_model <- lm(cases ~ Distributed + Distributed_Janssen + Distributed
                      
 #Summarize model and see significance of predictors
 summary(all_pred_lin_model)
-                     
-#I was thinking we can make a bunch of models and compare
- 
-# General only model    (only totals)                 
+
+# General only model    (only totals) 
+gen_lin_model <- lm(cases ~ Distributed + Series_Complete_Yes + 
+                           Additional_Doses, data=data)
+
+#view summary statistics
+summary(gen_lin_model)
+#Additional doses is by far the strongest predictor
+#Adjusted R-squared:  0.9802 
+
+
 # Janssen only model
+janssen_lin_model <- lm(cases ~ Distributed_Janssen + Series_Complete_Janssen + 
+                      Additional_Doses_Janssen, data=data)
+
+#summary statistics
+summary(janssen_lin_model)
+#Distributed_Janssen is the strongest predictor
+#Adjusted R-squared:  0.9734 
+
+
 # Moderna only model
+moderna_lin_model <- lm(cases ~ Distributed_Moderna + Series_Complete_Moderna + 
+                          Additional_Doses_Moderna, data=data)
+
+#summary statistics
+summary(moderna_lin_model)
+#Additional_Doses and Series_Complete
+#Adjusted R-squared:  0.9831
+
 # Pfizer only model
+pfizer_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Pfizer + 
+                          Additional_Doses_Pfizer, data=data)
+
+#summary statistics
+summary(pfizer_lin_model)
+#Additional doses is best predictor
+#Adjusted R-squared:  0.9759 
 
 #Try quadratic and other types of predictors? 
 #Research herd immunity and more background info so we have justification for choice of predictors
-                     
+
 #Test model using older data?
