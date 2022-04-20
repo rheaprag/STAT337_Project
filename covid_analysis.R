@@ -80,8 +80,9 @@ summary(pfizer_lin_model)
 #Try quadratic and other types of predictors? 
 #Research herd immunity and more background info so we have justification for choice of predictors
 
-#Test model using older data?
-                     
-                     
-#TO DO - Rhea
-  #pull data from ~ 1 year ago              
+#Data from 4/17/21
+nyt_cov_old <- nyt_covid[ c(22565:22619), ]
+cov_vac_old <- covid_vaccines[ c(22780:22844), ]
+#Repeat previous necessary steps
+nyt_cov_old$state <- state.abb[match(nyt_cov_old$state, state.name)]
+data_old <- merge(nyt_cov_old, cov_vac_old, by.x="state", by.y="Location")           
