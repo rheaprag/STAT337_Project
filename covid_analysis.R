@@ -81,3 +81,7 @@ summary(pfizer_lin_model)
 #Research herd immunity and more background info so we have justification for choice of predictors
 
 #Test model using older data?
+                     
+                     
+#TO DO - Rhea
+  #pull data from ~ 1 year ago              
