@@ -25,3 +25,46 @@ nyt_cov <- nyt_covid[ c(42847:42902), ]
 
 # Merge the datasets
 data <- merge(nyt_cov, cov_vac, by.x="state", by.y="Location")
+
+                     
+#####
+#changes
+
+
+#did you mean to use the original covid_vaccines file rather than the one shortened using Python?
+#I switched it to the shortened file here
+
+#Merge datasets individually by state
+cov_vac <- aggregate(x = cov_vac, by = list(cov_vac$Location), FUN = function(x) na.omit(x)[1])[,-1]
+nyt_cov <- aggregate(x = nyt_covid, by = list(nyt_covid$state), FUN = function(x) na.omit(x)[1])[,-1]
+
+#whats the fip column?
+# Pulls most recent covid rates (4/17/22)
+nyt_cov <- nyt_covid[ c(42847:42902), ]
+
+
+# Merge the datasets
+data <- merge(nyt_cov, cov_vac, by.x="state", by.y="Location")
+
+View(data)
+
+#Predict number of cases in any given state using all predictors
+all_pred_lin_model <- lm(cases ~ Distributed + Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
+                Series_Complete_Janssen + Series_Complete_Moderna + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
+                Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+
+#Summarize model and see significance of predictors
+#Distributed_Pfizer is the most significant
+summary(all_pred_lin_model)
+                     
+#I was thinking we can make a bunch of models and compare
+ 
+# General only model    (only totals)                 
+# Janssen only model
+# Moderna only model
+# Pfizer only model
+
+#Try quadratic and other types of predictors? 
+#Research herd immunity and more background info so we have justification for choice of predictors
+                     
+#Test model using older data?
