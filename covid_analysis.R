@@ -96,3 +96,42 @@ cov_vac_old <- covid_vaccines[ c(22780:22844), ]
 #Repeat previous necessary steps
 nyt_cov_old$state <- state.abb[match(nyt_cov_old$state, state.name)]
 data_old <- merge(nyt_cov_old, cov_vac_old, by.x="state", by.y="Location")           
+
+
+########
+
+set.seed(2022)
+
+# randomly shuffle the index
+index.random <- sample(1:dim(data)[1])
+
+# split the data (index) into 5 folds (unfortunately omits 2 data entries to make a clean cut)
+groups <- cut(1:10, 5, labels = FALSE)
+index.fold <- split(index.random, groups)
+
+# an empty vector to save individual MSE
+MSEs <- c()
+
+# 5-fold cross-validation
+for(index.test in index.fold) {
+  # create training and test set
+  data.test <- data[index.test,]
+  data.train <- data[-index.test,]
+  # fit a linear model on the training set
+  all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                             Additional_Doses_Janssen + Additional_Doses_Moderna + 
+                             Additional_Doses_Pfizer + state_pop, data=data)
+ 
+  # predict on the test set
+  yhat.test <- predict(all_pred_lin_model, data.test)
+
+  # calculate test MSE
+  y.test <- data.test$cases
+  MSE.test <- mean((y.test - yhat.test)ˆ2)
+  MSEs <- c(MSEs, MSE.test)
+}
+
+# plot 5 MSEs
+plot(1:5, MSEs, type='b', col='red', xlab='Fold', ylab='MSE')
+
+#######
