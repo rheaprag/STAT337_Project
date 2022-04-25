@@ -11,5 +11,7 @@ CDC Vaccination Data: https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in
 
 NYT Database: https://github.com/nytimes/covid-19-data
 
+USDA Population: https://data.ers.usda.gov/reports.aspx?ID=17827#P42c104e2d3474fe0b6264a8021176df0_2_138iT3
+
 ## Packages Used:
 This code was done using R programming language and Python3. The necessary libraries and installation instructions will be found in the project files. Some steps may need to be adjusted based on the individual's operating system.
