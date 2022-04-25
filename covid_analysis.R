@@ -26,15 +26,29 @@ cov_vac <- aggregate(x = covid_vaccines, by = list(covid_vaccines$Location), FUN
 data <- merge(nyt_cov, cov_vac, by.x="state", by.y="Location")
 
 #Predict number of cases in any given state using all predictors
-all_pred_lin_model <- lm(cases ~ Distributed + Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
-                Series_Complete_Janssen + Series_Complete_Moderna + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
-                Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
-                     
-  #LM returns with NA for Distributed_Pfizer...why?
-  #When I run LM without Distributed_Moderna, I get result for Pfizer?
-      #all_pred_lin_model <- lm(cases ~ Distributed + Distributed_Janssen + Distributed_Pfizer + Series_Complete_Yes + Series_Complete_Janssen +
-                     #Series_Complete_Moderna + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
-                     #Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+#Removing predictor 'Distributed' so redudancy between the Distrubted variables is no longer an issue
+all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
+                           Series_Complete_Janssen + Series_Complete_Moderna + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
+                           Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+
+#Performing backward selection
+#Remove 'Series_Complete_Pfizer'
+all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
+                           Series_Complete_Janssen + Series_Complete_Moderna + Additional_Doses + Additional_Doses_Janssen +
+                           Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+#Remove 'Series_Complete_Yes'
+all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + 
+                           Series_Complete_Janssen + Series_Complete_Moderna + Additional_Doses + Additional_Doses_Janssen +
+                           Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+#Remove 'Series_Complete_Janssen'
+all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Moderna + Additional_Doses + 
+                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+#Remove 'Distributed_Janssen'
+all_pred_lin_model <- lm(cases ~ Distributed_Moderna + Distributed_Pfizer + Series_Complete_Moderna + Additional_Doses + 
+                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+#Remove 'Distributed_Moderna'
+all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Moderna + Additional_Doses + 
+                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
                      
 #Summarize model and see significance of predictors
 summary(all_pred_lin_model)
