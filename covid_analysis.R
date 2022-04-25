@@ -139,7 +139,7 @@ for(index.test in index.fold){
   data.train <- data[-index.test,]
   janssen_lin_model <- lm(cases ~ Distributed_Janssen + Series_Complete_Janssen + 
                             Additional_Doses_Janssen + Pop_2020, data=data)
-  yhat.test <- predict(all_pred_lin_model, data.test)
+  yhat.test <- predict(janssen_lin_model, data.test)
   y.test <- data.test$cases
   MSE.test <- mean((y.test - yhat.test)^2)
   MSEs <- c(MSEs, MSE.test)
@@ -150,7 +150,7 @@ for(index.test in index.fold){
   data.train <- data[-index.test,]
   moderna_lin_model <- lm(cases ~ Distributed_Moderna + Series_Complete_Moderna + 
                             Additional_Doses_Moderna + Pop_2020, data=data)
-  yhat.test <- predict(all_pred_lin_model, data.test)
+  yhat.test <- predict(moderna_lin_model, data.test)
   y.test <- data.test$cases
   MSE.test <- mean((y.test - yhat.test)^2)
   MSEs <- c(MSEs, MSE.test)
@@ -161,7 +161,7 @@ for(index.test in index.fold){
   data.train <- data[-index.test,]
   pfizer_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Pfizer + 
                            Additional_Doses_Pfizer + Pop_2020, data=data)
-  yhat.test <- predict(all_pred_lin_model, data.test)
+  yhat.test <- predict(pfizer_lin_model, data.test)
   y.test <- data.test$cases
   MSE.test <- mean((y.test - yhat.test)^2)
   MSEs <- c(MSEs, MSE.test)
