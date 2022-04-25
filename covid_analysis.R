@@ -18,8 +18,14 @@ nyt_cov$state <- state.abb[match(nyt_cov$state, state.name)]
 #What do do about NAs? I think manually adding them would work bc I think there are abbreviations in the covid_vaccines file for them?
 #or we could just remove them? but there are 4026 of them
 
+#The Population CSV was downloaded and extracted from the original
+pop <- read.csv("pop.csv")
+#Because the pop file lists states in its full name vs abbreviation like the covid_vaccines file...
+pop$Name <- state.abb[match(pop$Name, state.name)]
+
 # Merge the datasets
-data <- merge(nyt_cov, covid_vac, by.x="state", by.y="Location")
+nyt_and_covid <- merge(nyt_cov, covid_vac, by.x="state", by.y="Location")
+data <- merge(nyt_and_covid, pop, by.x="state", by.y="Name")
 
 #Predict number of cases in any given state using all predictors
 #Removing predictor 'Distributed' so redudancy between the Distrubted variables is no longer an issue
