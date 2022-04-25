@@ -27,30 +27,24 @@ pop$Name <- state.abb[match(pop$Name, state.name)]
 nyt_and_covid <- merge(nyt_cov, covid_vac, by.x="state", by.y="Location")
 data <- merge(nyt_and_covid, pop, by.x="state", by.y="Name")
 
-#Predict number of cases in any given state using all predictors
-#Removing predictor 'Distributed' so redudancy between the Distrubted variables is no longer an issue
-all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
-                           Series_Complete_Janssen + Series_Complete_Moderna + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
-                           Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
-
 #Performing backward selection
-#Remove 'Series_Complete_Pfizer'
+#Remove 'Series_Complete_Moderna'
 all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
-                           Series_Complete_Janssen + Series_Complete_Moderna + Additional_Doses + Additional_Doses_Janssen +
-                           Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
-#Remove 'Series_Complete_Yes'
-all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + 
-                           Series_Complete_Janssen + Series_Complete_Moderna + Additional_Doses + Additional_Doses_Janssen +
-                           Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
-#Remove 'Series_Complete_Janssen'
-all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Moderna + Additional_Doses + 
-                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+                           Series_Complete_Janssen + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
+                           Additional_Doses_Moderna + Additional_Doses_Pfizer + Pop_2020, data=data)
 #Remove 'Distributed_Janssen'
-all_pred_lin_model <- lm(cases ~ Distributed_Moderna + Distributed_Pfizer + Series_Complete_Moderna + Additional_Doses + 
-                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+all_pred_lin_model <- lm(cases ~ Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
+                           Series_Complete_Janssen + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
+                           Additional_Doses_Moderna + Additional_Doses_Pfizer + Pop_2020, data=data)
+#Remove 'Series_Complete_Janssen'
+all_pred_lin_model <- lm(cases ~ Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + Series_Complete_Pfizer + Additional_Doses + 
+                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer + Pop_2020, data=data)
+#Remove 'Series_Complete_Pfizer'
+all_pred_lin_model <- lm(cases ~ Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer + Pop_2020, data=data)
 #Remove 'Distributed_Moderna'
-all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Moderna + Additional_Doses + 
-                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer, data=data)
+all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                           Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer + Pop_2020, data=data)
                      
 #Summarize model and see significance of predictors
 summary(all_pred_lin_model)
