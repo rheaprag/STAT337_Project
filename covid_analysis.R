@@ -1,5 +1,4 @@
-# Import Necessary CSV Files
-
+########################Import and Adjust Input Files########################
 # The CDC Covid Vaccine CSV was extracted from the original CSV found in the READMe file. 
 covid_vaccines <- read.csv('covid_vac.csv')
 # Pulls most recent covid rates (4/17/22)
@@ -27,7 +26,14 @@ pop$Name <- state.abb[match(pop$Name, state.name)]
 nyt_and_covid <- merge(nyt_cov, covid_vac, by.x="state", by.y="Location")
 data <- merge(nyt_and_covid, pop, by.x="state", by.y="Name")
 
-#Performing backward selection
+########################Linear Regression Model########################
+#Predict number of cases in any given state using all predictors
+#Removing predictor 'Distributed' so redudancy between the Distrubted variables is no longer an issue
+all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
+                           Series_Complete_Janssen + Series_Complete_Moderna + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
+                           Additional_Doses_Moderna + Additional_Doses_Pfizer + Pop_2020, data=data)
+
+########################Backward Selection########################
 #Remove 'Series_Complete_Moderna'
 all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
                            Series_Complete_Janssen + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
@@ -45,13 +51,19 @@ all_pred_lin_model <- lm(cases ~ Distributed_Moderna + Distributed_Pfizer + Seri
 #Remove 'Distributed_Moderna'
 all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
                            Additional_Doses_Janssen + Additional_Doses_Moderna + Additional_Doses_Pfizer + Pop_2020, data=data)
-                     
+
 #Summarize model and see significance of predictors
 summary(all_pred_lin_model)
 
+# Plots
+data_lm <- lm(cases~Pop_2020, data = data)
+plot(cases~Pop_2020, data = data)
+abline(data_lm)
+
+########################General Linear Regression Model########################
 # General only model    (only totals) 
 gen_lin_model <- lm(cases ~ Distributed + Series_Complete_Yes + 
-                           Additional_Doses, data=data)
+                      Additional_Doses, data=data)
 
 #view summary statistics
 summary(gen_lin_model)
@@ -61,7 +73,7 @@ summary(gen_lin_model)
 
 # Janssen only model
 janssen_lin_model <- lm(cases ~ Distributed_Janssen + Series_Complete_Janssen + 
-                      Additional_Doses_Janssen, data=data)
+                          Additional_Doses_Janssen + Pop_2020, data=data)
 
 #summary statistics
 summary(janssen_lin_model)
@@ -71,7 +83,7 @@ summary(janssen_lin_model)
 
 # Moderna only model
 moderna_lin_model <- lm(cases ~ Distributed_Moderna + Series_Complete_Moderna + 
-                          Additional_Doses_Moderna, data=data)
+                          Additional_Doses_Moderna + Pop_2020, data=data)
 
 #summary statistics
 summary(moderna_lin_model)
@@ -80,7 +92,7 @@ summary(moderna_lin_model)
 
 # Pfizer only model
 pfizer_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Pfizer + 
-                          Additional_Doses_Pfizer, data=data)
+                         Additional_Doses_Pfizer + Pop_2020, data=data)
 
 #summary statistics
 summary(pfizer_lin_model)
@@ -90,48 +102,70 @@ summary(pfizer_lin_model)
 #Try quadratic and other types of predictors? 
 #Research herd immunity and more background info so we have justification for choice of predictors
 
+########################Old Data########################
 #Data from 4/17/21
 nyt_cov_old <- nyt_covid[ c(22565:22619), ]
 cov_vac_old <- covid_vaccines[ c(22780:22844), ]
 #Repeat previous necessary steps
 nyt_cov_old$state <- state.abb[match(nyt_cov_old$state, state.name)]
-data_old <- merge(nyt_cov_old, cov_vac_old, by.x="state", by.y="Location")           
+data_old <- merge(nyt_cov_old, cov_vac_old, by.x="state", by.y="Location")  
 
-
-########
-
+########################Quality Control########################
 set.seed(2022)
-
-# randomly shuffle the index
+# Randomly shuffle the index
 index.random <- sample(1:dim(data)[1])
-
-# split the data (index) into 5 folds (unfortunately omits 2 data entries to make a clean cut)
+# Split the data (index) into 5 folds
 groups <- cut(1:10, 5, labels = FALSE)
 index.fold <- split(index.random, groups)
-
-# an empty vector to save individual MSE
+# Create an empty vector to save individual MSE
 MSEs <- c()
 
-# 5-fold cross-validation
-for(index.test in index.fold) {
-  # create training and test set
+# Do 5-fold cross-validation for data (All)
+for(index.test in index.fold){
   data.test <- data[index.test,]
   data.train <- data[-index.test,]
-  # fit a linear model on the training set
   all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
                              Additional_Doses_Janssen + Additional_Doses_Moderna + 
-                             Additional_Doses_Pfizer + state_pop, data=data)
- 
-  # predict on the test set
+                             Additional_Doses_Pfizer + Pop_2020, data=data)
   yhat.test <- predict(all_pred_lin_model, data.test)
-
-  # calculate test MSE
   y.test <- data.test$cases
-  MSE.test <- mean((y.test - yhat.test)ˆ2)
+  MSE.test <- mean((y.test - yhat.test)^2)
   MSEs <- c(MSEs, MSE.test)
 }
 
-# plot 5 MSEs
-plot(1:5, MSEs, type='b', col='red', xlab='Fold', ylab='MSE')
+# Repeat this for the Janssen, Moderna, Pfizer
+for(index.test in index.fold){
+  data.test <- data[index.test,]
+  data.train <- data[-index.test,]
+  janssen_lin_model <- lm(cases ~ Distributed_Janssen + Series_Complete_Janssen + 
+                            Additional_Doses_Janssen + Pop_2020, data=data)
+  yhat.test <- predict(all_pred_lin_model, data.test)
+  y.test <- data.test$cases
+  MSE.test <- mean((y.test - yhat.test)^2)
+  MSEs <- c(MSEs, MSE.test)
+}
 
-#######
+for(index.test in index.fold){
+  data.test <- data[index.test,]
+  data.train <- data[-index.test,]
+  moderna_lin_model <- lm(cases ~ Distributed_Moderna + Series_Complete_Moderna + 
+                            Additional_Doses_Moderna + Pop_2020, data=data)
+  yhat.test <- predict(all_pred_lin_model, data.test)
+  y.test <- data.test$cases
+  MSE.test <- mean((y.test - yhat.test)^2)
+  MSEs <- c(MSEs, MSE.test)
+}
+
+for(index.test in index.fold){
+  data.test <- data[index.test,]
+  data.train <- data[-index.test,]
+  pfizer_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Pfizer + 
+                           Additional_Doses_Pfizer + Pop_2020, data=data)
+  yhat.test <- predict(all_pred_lin_model, data.test)
+  y.test <- data.test$cases
+  MSE.test <- mean((y.test - yhat.test)^2)
+  MSEs <- c(MSEs, MSE.test)
+}
+
+# Plot the 5 MSEs
+plot(1:5, MSEs, type='b', col='red', xlab='Fold', ylab='MSE')
