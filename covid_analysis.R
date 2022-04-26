@@ -60,7 +60,7 @@ data_lm <- lm(cases~Pop_2020, data = data)
 plot(cases~Pop_2020, data = data)
 abline(data_lm)
 
-########################General Linear Regression Model########################
+########################Vaccine-Specific Linear Regression Model########################
 # General only model    (only totals) 
 gen_lin_model <- lm(cases ~ Distributed + Series_Complete_Yes + 
                       Additional_Doses, data=data)
