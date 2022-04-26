@@ -169,3 +169,176 @@ for(index.test in index.fold){
 
 # Plot the 5 MSEs
 plot(1:5, MSEs, type='b', col='red', xlab='Fold', ylab='MSE')
+
+####
+
+# backward selection based on AIC (same results)
+step(all_pred_lin_model, direction = 'backward')
+
+
+#######################################bootstrap
+
+#empty vector for bootstrap estimations
+dist_pfizer.hat <- c()
+
+#resample 100 times
+set.seed(2022)
+
+for(i in 1:100){
+  index.boot <- sample(1:dim(data)[1], size = dim(data)[1], replace = T)
+  data.boot <- data[index.boot,]
+  
+  all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                             Additional_Doses_Janssen + Additional_Doses_Moderna + 
+                             Additional_Doses_Pfizer + Pop_2020, data=data.boot)
+  
+  dist_pfizer.hat[i] <- all_pred_lin_model$coefficients[2]
+  
+}
+dist_pfizer.hat
+hist(dist_pfizer.hat)
+
+
+all_pred_lin_model <- lm(cases ~ Distributed_Janssen + Distributed_Moderna + Distributed_Pfizer + Series_Complete_Yes + 
+                           Series_Complete_Janssen + Series_Complete_Moderna + Series_Complete_Pfizer + Additional_Doses + Additional_Doses_Janssen +
+                           Additional_Doses_Moderna + Additional_Doses_Pfizer + Pop_2020, data=data)
+
+####
+
+#empty vector for bootstrap estimations
+dist_series_complete.hat <- c()
+
+#resample 100 times
+set.seed(2022)
+
+for(i in 1:100){
+  index.boot <- sample(1:dim(data)[1], size = dim(data)[1], replace = T)
+  data.boot <- data[index.boot,]
+  
+  all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                             Additional_Doses_Janssen + Additional_Doses_Moderna + 
+                             Additional_Doses_Pfizer + Pop_2020, data=data.boot)
+  
+  dist_series_complete.hat[i] <- all_pred_lin_model$coefficients[3]
+  
+}
+
+hist(dist_series_complete.hat)
+
+#####
+
+#empty vector for bootstrap estimations
+dist_add_doses.hat <- c()
+
+#resample 100 times
+set.seed(2022)
+
+for(i in 1:100){
+  index.boot <- sample(1:dim(data)[1], size = dim(data)[1], replace = T)
+  data.boot <- data[index.boot,]
+  
+  all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                             Additional_Doses_Janssen + Additional_Doses_Moderna + 
+                             Additional_Doses_Pfizer + Pop_2020, data=data.boot)
+  
+  dist_add_doses.hat[i] <- all_pred_lin_model$coefficients[4]
+  
+}
+
+hist(dist_add_doses.hat)
+
+
+#####
+
+#empty vector for bootstrap estimations
+dist_add_janssen.hat <- c()
+
+#resample 100 times
+set.seed(2022)
+
+for(i in 1:100){
+  index.boot <- sample(1:dim(data)[1], size = dim(data)[1], replace = T)
+  data.boot <- data[index.boot,]
+  
+  all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                             Additional_Doses_Janssen + Additional_Doses_Moderna + 
+                             Additional_Doses_Pfizer + Pop_2020, data=data.boot)
+  
+  dist_add_janssen.hat[i] <- all_pred_lin_model$coefficients[5]
+  
+}
+
+hist(dist_add_janssen.hat)
+
+
+#####
+
+#empty vector for bootstrap estimations
+dist_add_moderna.hat <- c()
+
+#resample 100 times
+set.seed(2022)
+
+for(i in 1:100){
+  index.boot <- sample(1:dim(data)[1], size = dim(data)[1], replace = T)
+  data.boot <- data[index.boot,]
+  
+  all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                             Additional_Doses_Janssen + Additional_Doses_Moderna + 
+                             Additional_Doses_Pfizer + Pop_2020, data=data.boot)
+  
+  dist_add_moderna.hat[i] <- all_pred_lin_model$coefficients[6]
+  
+}
+
+hist(dist_add_moderna.hat)
+
+#####
+
+#empty vector for bootstrap estimations
+dist_add_pfizer.hat <- c()
+
+#resample 100 times
+set.seed(2022)
+
+for(i in 1:100){
+  index.boot <- sample(1:dim(data)[1], size = dim(data)[1], replace = T)
+  data.boot <- data[index.boot,]
+  
+  all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                             Additional_Doses_Janssen + Additional_Doses_Moderna + 
+                             Additional_Doses_Pfizer + Pop_2020, data=data.boot)
+  
+  dist_add_pfizer.hat[i] <- all_pred_lin_model$coefficients[7]
+  
+}
+
+hist(dist_add_pfizer.hat)
+
+
+#####
+
+
+
+#empty vector for bootstrap estimations
+dist_pop.hat <- c()
+
+#resample 100 times
+set.seed(2022)
+
+for(i in 1:100){
+  index.boot <- sample(1:dim(data)[1], size = dim(data)[1], replace = T)
+  data.boot <- data[index.boot,]
+  
+  all_pred_lin_model <- lm(cases ~ Distributed_Pfizer + Series_Complete_Yes + Additional_Doses + 
+                             Additional_Doses_Janssen + Additional_Doses_Moderna + 
+                             Additional_Doses_Pfizer + Pop_2020, data=data.boot)
+  
+  dist_pop.hat[i] <- all_pred_lin_model$coefficients[8]
+  
+}
+
+hist(dist_pop.hat)
+
+
+#####
