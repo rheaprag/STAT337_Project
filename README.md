@@ -1,10 +1,8 @@
 # STAT337_Project
 
-This documentation details the analysis of SARS-Cov-2, also known as COVID-19. 
+This documentation details the analysis of how the vaccine type and distribution impact the number of Covid-19 cases per state? 
 
-The data used will be official CDC Vaccination Data which will include state, doses administered by vaccine brand, doses administered by age, and if a full series was delievered. The New York Times official database is regulary updated with information of the number of cases and the number of deaths per state. UDSA Population data from 2020 will also be used in order to compare the covid data with state population. 
-
-Our analysis includes the following question: How does the vaccine type and distribution impact the number of Covid-19 cases per state?
+The data used will be official CDC Vaccination Data which will include state, doses administered by vaccine brand, doses administered by age, and if a full series was delievered. The New York Times official database is regulary updated with information of the number of cases and the number of deaths per state. UDSA Population data from 2020 will also be used in order to compare the covid data with state population.
 
 ## The official raw data can be found here:
 CDC Vaccination Data: https://data.cdc.gov/Vaccinations/COVID-19-Vaccinations-in-the-United-States-Jurisdi/unsk-b7fc/data
