@@ -115,8 +115,11 @@ index.random <- sample(1:dim(data)[1])
 # Split the data (index) into 5 folds
 groups <- cut(1:10, 5, labels = FALSE)
 index.fold <- split(index.random, groups)
+
 # Create an empty vector to save individual MSE
 MSEs <- c()
+RMSEs <- c()
+NRMSEs <- c()
 
 # Do 5-fold cross-validation for data (All)
 for(index.test in index.fold){
@@ -129,7 +132,22 @@ for(index.test in index.fold){
   y.test <- data.test$cases
   MSE.test <- mean((y.test - yhat.test)^2)
   MSEs <- c(MSEs, MSE.test)
+  
+   # root MSE
+  RMSE.test <- sqrt(MSE.test)
+  RMSEs <- c(RMSEs, RMSE.test)
+  
+  # normalized root MSE
+  NRMSE.test <- RMSE.test / mean(y.test)
+  NRMSEs <- c(NRMSEs, NRMSE.test)
 }
+
+# Plot the 5 MSEs
+plot(1:5, MSEs, type='b', col='red', xlab='Fold', ylab='MSE')
+
+avg_NRMSE <- mean(NRMSEs)
+
+avg_NRMSE
 
 # Repeat this for the Janssen, Moderna, Pfizer
 for(index.test in index.fold){
@@ -141,7 +159,21 @@ for(index.test in index.fold){
   y.test <- data.test$cases
   MSE.test <- mean((y.test - yhat.test)^2)
   MSEs <- c(MSEs, MSE.test)
+  # root MSE
+  RMSE.test <- sqrt(MSE.test)
+  RMSEs <- c(RMSEs, RMSE.test)
+  
+  # normalized root MSE
+  NRMSE.test <- RMSE.test / mean(y.test)
+  NRMSEs <- c(NRMSEs, NRMSE.test)
 }
+
+avg_NRMSE <- mean(NRMSEs)
+
+avg_NRMSE
+
+# Plot the 5 MSEs
+plot(1:5, MSEs, type='b', col='red', xlab='Fold', ylab='MSE')
 
 for(index.test in index.fold){
   data.test <- data[index.test,]
@@ -152,7 +184,21 @@ for(index.test in index.fold){
   y.test <- data.test$cases
   MSE.test <- mean((y.test - yhat.test)^2)
   MSEs <- c(MSEs, MSE.test)
+  # root MSE
+  RMSE.test <- sqrt(MSE.test)
+  RMSEs <- c(RMSEs, RMSE.test)
+  
+  # normalized root MSE
+  NRMSE.test <- RMSE.test / mean(y.test)
+  NRMSEs <- c(NRMSEs, NRMSE.test)
 }
+
+avg_NRMSE <- mean(NRMSEs)
+
+avg_NRMSE
+
+# Plot the 5 MSEs
+plot(1:5, MSEs, type='b', col='red', xlab='Fold', ylab='MSE')
 
 for(index.test in index.fold){
   data.test <- data[index.test,]
@@ -163,7 +209,18 @@ for(index.test in index.fold){
   y.test <- data.test$cases
   MSE.test <- mean((y.test - yhat.test)^2)
   MSEs <- c(MSEs, MSE.test)
+  # root MSE
+  RMSE.test <- sqrt(MSE.test)
+  RMSEs <- c(RMSEs, RMSE.test)
+  
+  # normalized root MSE
+  NRMSE.test <- RMSE.test / mean(y.test)
+  NRMSEs <- c(NRMSEs, NRMSE.test)
 }
+
+avg_NRMSE <- mean(NRMSEs)
+
+avg_NRMSE
 
 # Plot the 5 MSEs
 plot(1:5, MSEs, type='b', col='red', xlab='Fold', ylab='MSE')
